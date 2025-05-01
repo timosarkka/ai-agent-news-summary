@@ -1,4 +1,4 @@
-# Job Search AI Agent
+# AI Agent for Job Search
 
 This AI Agent automates the job search process. 
 
