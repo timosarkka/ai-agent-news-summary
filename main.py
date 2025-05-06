@@ -1,41 +1,31 @@
 # Import libraries
-from smolagents import CodeAgent, HfApiModel, tool
-import requests
 import yaml
-from tools.final_answer import FinalAnswerTool
-
-# Below is an example of a tool that does nothing. 
-@tool
-def my_custom_tool(arg1:str, arg2:int)-> str: #it's import to specify the return type
-    #Keep this format for the description / args / args description but feel free to modify the tool
-    """A tool that does nothing yet 
-    Args:
-        arg1: the first argument
-        arg2: the second argument
-    """
-    return "What magic will you build ?"
-
-final_answer = FinalAnswerTool()
-
-# Defining the model to be used
-model = HfApiModel(
-max_tokens=2096,
-temperature=0.5,
-model_id='Qwen/Qwen2.5-Coder-32B-Instruct',
-custom_role_conversions=None,
-)
+from smolagents import CodeAgent, OpenAIModel
+from tools.news_tools import latest_news
+from tools.final_answer import final_answer
 
 with open("prompts.yaml", 'r') as stream:
     prompt_templates = yaml.safe_load(stream)
-    
+
+# Define the model to be used
+model = OpenAIModel(
+    model_id="o4-mini-high",
+    temperature=0.5,
+    max_tokens=2096
+)
+
+# Define agent  
 agent = CodeAgent(
     model=model,
-    tools=[final_answer], ## add your tools here (don't remove final answer)
+    tools=[latest_news, final_answer],
     max_steps=6,
     verbosity_level=1,
-    grammar=None,
-    planning_interval=None,
-    name=None,
-    description=None,
     prompt_templates=prompt_templates
 )
+
+# Run the agent
+if __name__ == "__main__":
+    domain = input("Enter the news domain (e.g. hs.fi, yle.fi, bbc.com): ").strip()
+    user_query = f"Fetch the latest news headlines from {domain} and summarize today's most important stories."
+    summary = agent.run(user_query)
+    print(summary)
