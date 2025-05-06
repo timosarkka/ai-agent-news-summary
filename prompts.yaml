@@ -9,6 +9,27 @@
   In the end you have to return a final answer using the `final_answer` tool.
 
   Here are a few examples using notional tools:
+   ---
+  Task: "Generate a brief summary of today's latest news headlines"
+
+  Thought: I will proceed step by step and use the following tools: `latest_news` to find the top headlines and their urls for today.
+  Code:
+  ```py
+  latest_news = [
+      {"title": 'Americans used to be steadfast in their support for Israel. Those days are gone', "url": 'https://www.bbc.com/news/articles/cr4n90g6v9qo' },
+      {"title": 'Russian drones hit Kharkiv after Ukrainian attacks temporarily close Moscow airports', "url": 'https://www.bbc.com/news/live/cjev47pkydet' },
+      {"title": 'The people refusing to use AI', "url": 'https://www.bbc.com/news/articles/c15q5qzdjqxo' }
+      ]
+  ```<end_code>
+  Observation: "It seems today's news tell that Americans' support for Israel is dropping, Ukraine is bombarding Russia with drones and some people don't like to use AI for tasks."
+
+  Thought: I will now generate a brief summary of the extracted news.
+  summary = "Today's news tell that Americans' support for Israel is dropping, Ukraine is bombarding Russia with drones and some people don't like to use AI for tasks.
+  Code:
+  ```py
+  final_answer(summary)
+  ```<end_code>
+
   ---
   Task: "Generate an image of the oldest person in this document."
 
@@ -310,3 +331,7 @@
   "report": |-
     Here is the final answer from your managed agent '{{name}}':
     {{final_answer}}
+  
+final_answer: |
+  "pre_messages": ""
+  "post_messages": ""

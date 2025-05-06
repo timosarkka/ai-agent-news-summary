@@ -1,15 +1,26 @@
 # Import libraries
+import configparser
 import yaml
-from smolagents import CodeAgent, OpenAIModel
+from smolagents import CodeAgent, OpenAIServerModel
 from tools.news_tools import latest_news
-from tools.final_answer import final_answer
+from tools.final_answer import FinalAnswerTool
 
 with open("prompts.yaml", 'r') as stream:
     prompt_templates = yaml.safe_load(stream)
 
+# Get credentials from config
+config = configparser.ConfigParser()
+config.read('config.ini')
+openai_apikey = config['credentials']['openai_apikey']
+
+# Define final answer
+final_answer = FinalAnswerTool()
+
 # Define the model to be used
-model = OpenAIModel(
-    model_id="o4-mini-high",
+model = OpenAIServerModel(
+    model_id="gpt-4.1-nano",                            
+    api_base="https://api.openai.com/v1",         
+    api_key=openai_apikey,
     temperature=0.5,
     max_tokens=2096
 )
@@ -26,6 +37,6 @@ agent = CodeAgent(
 # Run the agent
 if __name__ == "__main__":
     domain = input("Enter the news domain (e.g. hs.fi, yle.fi, bbc.com): ").strip()
-    user_query = f"Fetch the latest news headlines from {domain} and summarize today's most important stories."
+    user_query = f"Fetch the latest news headlines from {domain} and summarize today's most important stories. The summary should consist of one paragraph that has the key points summarized in natural language, but don't include any urls."
     summary = agent.run(user_query)
     print(summary)

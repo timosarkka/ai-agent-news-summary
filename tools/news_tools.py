@@ -7,13 +7,18 @@ from smolagents import tool
 # Load API key
 config = configparser.ConfigParser()
 config.read('config.ini')
-apikey = config['newsdata']['apikey']
+news_apikey = config['credentials']['news_apikey']
 
 @tool
 def latest_news(domainurl: str) -> str:
-    # Fetches the 10 latest news headlines and URLs from the specified domain.
-    # Returns a JSON string of a list of {"title": ..., "url": ...}.
-    url = f'https://newsdata.io/api/1/latest?apikey={apikey}&domainurl={domainurl}'
+    """
+    Fetches the 10 latest news headlines and URLs from the specified domain.
+    Args:
+        domainurl: The news site’s domain, e.g. "bbc.com" or "yle.fi".
+    Returns:
+        A JSON‐string of a list of {"title": ..., "url": ...} dictionaries.
+    """
+    url = f'https://newsdata.io/api/1/latest?apikey={news_apikey}&domainurl={domainurl}'
     response = requests.get(url)
     data = response.json().get("results", [])
     headlines_list = []

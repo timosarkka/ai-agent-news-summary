@@ -10,13 +10,16 @@
         }
       ],
     "model": {
-        "class": "OpenAIModel",
+        "model_class": "OpenAIServerModel",
         "data": {
+            "model_id": "gpt-4.1-nano",
+            "api_base": "https://api.openai.com/v1",
+            "api_key_env": "openai_apikey",
             "max_tokens": 2096,
+            "max_steps": 6,
             "temperature": 0.5,
             "last_input_token_count": null,
             "last_output_token_count": null,
-            "model_id": "o4-mini-high",
             "custom_role_conversions": null
         }
     },
