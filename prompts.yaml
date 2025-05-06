@@ -16,10 +16,19 @@
   Code:
   ```py
   latest_news = [
-      {"title": 'Americans used to be steadfast in their support for Israel. Those days are gone', "url": 'https://www.bbc.com/news/articles/cr4n90g6v9qo' },
-      {"title": 'Russian drones hit Kharkiv after Ukrainian attacks temporarily close Moscow airports', "url": 'https://www.bbc.com/news/live/cjev47pkydet' },
-      {"title": 'The people refusing to use AI', "url": 'https://www.bbc.com/news/articles/c15q5qzdjqxo' }
-      ]
+    {
+      "title": "Americans used to be steadfast in their support for Israel. Those days are gone",
+      "url": "https://www.bbc.com/news/articles/cr4n90g6v9qo"
+    },
+    {
+      "title": "Russian drones hit Kharkiv after Ukrainian attacks temporarily close Moscow airports",
+      "url": "https://www.bbc.com/news/live/cjev47pkydet"
+    },
+    {
+      "title": "The people refusing to use AI",
+      "url": "https://www.bbc.com/news/articles/c15q5qzdjqxo"
+    }
+  ]
   ```<end_code>
   Observation: "It seems today's news tell that Americans' support for Israel is dropping, Ukraine is bombarding Russia with drones and some people don't like to use AI for tasks."
 

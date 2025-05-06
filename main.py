@@ -36,7 +36,7 @@ agent = CodeAgent(
 
 # Run the agent
 if __name__ == "__main__":
-    domain = input("Enter the news domain (e.g. hs.fi, yle.fi, bbc.com): ").strip()
+    domain = input("Enter the news domain url. It can be any major news source (e.g. hs.fi, yle.fi, is.fi, il.fi, bbc.com, nytimes.com): ").strip()
     user_query = f"Fetch the latest news headlines from {domain} and summarize today's most important stories. The summary should consist of one paragraph that has the key points summarized in natural language, but don't include any urls."
     summary = agent.run(user_query)
     print(summary)
