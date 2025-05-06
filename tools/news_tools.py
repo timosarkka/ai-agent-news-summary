@@ -25,4 +25,4 @@ def latest_news(domainurl: str) -> str:
     for article in data[:10]:
         dict = {"title": article["title"], "url": article["link"]}
         headlines_list.append(dict)
-    return json.dumps(headlines_list)
+    return headlines_list
