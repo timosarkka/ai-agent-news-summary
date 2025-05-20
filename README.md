@@ -71,7 +71,3 @@ The basic architecture of the agent is currently as follows:
    - **Observe**: ingests headline data  
    - **Think**: LLM writes a one-paragraph summary  
    - **Act**: calls `final_answer` to output the result
-
-## 6. Future Work
-
-To be determined.
