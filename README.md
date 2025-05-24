@@ -60,13 +60,11 @@ The basic architecture of the agent is currently as follows:
 
 The project files and folders are structured as shown below. **Note that I have not provided config.ini itself for security reasons**, but this is just a standard config-setup, so it should be quite straightforward to build on your own.
 
-For more elaboration on the actual **agent architecture**, please see section 5.
-
 ```
 ai-agent-news-summary
 ├── tools/
 │   ├── final_answer.py     # Allows the agent to form the final answer
-|   ├── news_tools.py       # Contains the tools for extracting headlines and news via newsdata.io API
+|   ├── news_tools.py       # Contains the tools
 |   ├── __init__.py         # This is needed so that the folder is recognized as a package
 ├── agent.json              # Contains the basic agent definition, including model, tools, prompt_templates, authorized imports
 ├── config.ini              # Config loader
