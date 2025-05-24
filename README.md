@@ -2,17 +2,17 @@
 
 ## 1. Introduction
 
-This is a lightweight Python-based AI agent that fetches the latest headlines from any news domain and generates a concise daily news summary using an LLM. Currently, I'm using **gpt-4.1-nano** for the summarizing. The agent framework I'm using is [smolagents](https://github.com/huggingface/smolagents).
+This is a lightweight Python-based AI agent that searches for the latest news from any news domain, reads the articles and generates a concise daily news summary using an LLM. Currently, I'm using **gpt-4.1-nano** model for the summarizing. The agent framework I'm using is [smolagents](https://github.com/huggingface/smolagents).
 
-**This repo is a work-in-progress**, I will keep adding features as I learn more about agents.
+**This repo is a work-in-progress**, I will keep adding features as I learn how to build cool stuff.
 
-The template used to build this agent was kindly provided by [Hugging Face](https://huggingface.co/spaces/agents-course/First_agent_template).
+The original template used to build this agent was kindly provided by [Hugging Face](https://huggingface.co/spaces/agents-course/First_agent_template).
 
 ## 2. Main Features
 
-Currently, the tool is in it's first draft version, so the functionality is quite minimal. 
+When executing the tool manually, it asks for a news website domain url from the user (for example, [hs.fi](https://hs.fi), [yle.fi](https://yle.fi), [bbc.com](https://bbc.com), [nytimes.com](https://nytimes.com), [reuters.com](https://reuters.com) or any other major news outlet that can be used by the [newsdata.io API](https://newsdata.io/)) and as an output, returns an approximately 125-word long daily news analysis for the user.
 
-The tool asks for a news website domain url from the user (for example, [hs.fi](https://hs.fi), [yle.fi](https://yle.fi), [bbc.com](https://bbc.com), [nytimes.com](https://nytimes.com) or any other major news outlet that can be used by the [newsdata.io API](https://newsdata.io/)) and as an output, returns a one paragraph summary of the daily news:
+Example of manual usage from the command line:
 \
 \
 \
