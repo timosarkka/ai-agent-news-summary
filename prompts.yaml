@@ -10,33 +10,76 @@
 
   Here are a few examples using notional tools:
    ---
-  Task: "Generate a brief summary of today's latest news headlines"
+  Task: "Generate a brief summary of today's latest news"
 
-  Thought: I will proceed step by step and use the following tools: `latest_news` to find the top headlines and their urls for today.
+  Thought: I will proceed step by step and use the following tools: 
+  - `latest_news` to find the top headlines and their urls for today.
+  - `fetch_article_text` to actually extract the full article texts behind the headlines and urls.
+  - `summarize_articles` to create comprehensive summaries of news articles, to be used in the final summary analysis of today's news
+
   Code:
   ```py
   latest_news = [
     {
-      "title": "Americans used to be steadfast in their support for Israel. Those days are gone",
-      "url": "https://www.bbc.com/news/articles/cr4n90g6v9qo"
+      "title": "Tensions rise as superpowers scrap for a piece of the Arctic",
+      "url": "https://www.bbc.com/news/articles/cjwqn7z02plo"
     },
     {
-      "title": "Russian drones hit Kharkiv after Ukrainian attacks temporarily close Moscow airports",
-      "url": "https://www.bbc.com/news/live/cjev47pkydet"
+      "title": "Hectic two weeks leaves Russia confident - and peace in Ukraine feeling no closer",
+      "url": "https://www.bbc.com/news/articles/c1w387gr30ro"
     },
     {
-      "title": "The people refusing to use AI",
-      "url": "https://www.bbc.com/news/articles/c15q5qzdjqxo"
+      "title": "Harvard foreign students face uncertainty as Trump plan to block enrolment is halted - for now",
+      "url": "https://www.bbc.com/news/articles/cje7ledqvyqo"
     }
   ]
   ```<end_code>
-  Observation: "It seems today's news tell that Americans' support for Israel is dropping, Ukraine is bombarding Russia with drones and some people don't like to use AI for tasks."
 
-  Thought: I will now generate a brief summary of the extracted news.
-  summary = "Today's news tell that Americans' support for Israel is dropping, Ukraine is bombarding Russia with drones and some people don't like to use AI for tasks.
+  Observation: "I now have extracted the headlines and urls for the articles." 
+  Thought: "Let me now extract the actual news article texts to analyze them.""
+
+   Code:
+  ```py
+  articles = []
+  for h in latest_news:
+    body = fetch_article_text(h["url"])
+    articles.append({
+      "title": h["title"],
+      "url":   h["url"],
+      "text":  body
+    })
+  ```<end_code>
+
+  Observation: "I now have the full text for each article."
+  Thought: "I will now generate comprehensive summaries for each article."
+  
   Code:
   ```py
-  final_answer(summary)
+  summaries = summarize_articles(articles, max_length=200)
+  ```<end_code>
+
+  Observation:
+  [
+  {"title": "...Arctic...", "url": "...cjwqn7z02plo", "summary": "…(200 words max)…"},
+  {"title": "...two weeks...", "url": "...c1w387gr30ro", "summary": "…(200 words max)…"},
+  {"title": "...foreign students...", "url": "...cje7ledqvyqo", "summary": "…(200 words max)…"}
+  ]
+
+  Thought: "I have a summary for each of the articles. I will now merge these individual summaries into a single, coherent overview of today’s news, targeting about 125 words."
+
+    Code:
+  ```py
+  # Combine the text of all summaries
+  combined_text = "\n\n".join(s["summary"] for s in summaries)
+  
+  # Use summarize_articles to distill the combined text into one unified summary
+  final_entry = {
+      "title": "Unified Summary of Today’s News",
+      "url": "",
+      "text": combined_text
+  }
+  unified = summarize_articles([final_entry], max_length=125)[0]["summary"]
+  final_answer(unified)
   ```<end_code>
 
   ---

@@ -2,8 +2,16 @@
     "tools": [
         {
           "name": "latest_news",
-          "description": "Fetches the 10 latest news headlines for a given domain. Returns JSON list of {title, url}."
+          "description": "Fetches the 10 latest news headlines and urls for a given domain. Returns JSON list of {title, url}."
         },
+        {
+            "name": "fetch_article_text",
+            "description": "Downloads and cleans a news article’s main text using newspaper3k. Returns str."
+        },
+        {
+            "name": "summarize_articles",
+            "description": "Takes a list of {title, url, text} and returns detailed LLM‐powered summariea: list[dict]: One dict per article, with 'title', 'url', and 'summary'."
+        },  
         {
           "name": "final_answer",
           "description": "Outputs the agent’s final answer to the user."

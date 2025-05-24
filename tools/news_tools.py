@@ -71,6 +71,7 @@ def summarize_articles(articles: list[dict], max_length: int = 500) -> list[dict
     """
     Given a list of {"title":…, "url":…, "text":…}, produce
     {"title", "url", "summary"} for each via LLM.
+
     Args:
         articles (list[dict]): Each dict must have keys 'title', 'url', and
             'text' (the full article body).
@@ -89,13 +90,13 @@ def summarize_articles(articles: list[dict], max_length: int = 500) -> list[dict
             f"Summary (max {max_length} words):"
         )
 
-        # Call the model via smolagents
-        response = _model.chat_completion(  
+        # invoke the model; returns a ChatMessage
+        message = _model(
             messages=[{"role": "user", "content": prompt}],
             max_tokens=int(max_length * 1.5),
         )
-        # Extract just the text of the assistant’s reply
-        summary_text = response.choices[0].message.content.strip()
+        # extract the text directly
+        summary_text = message.content.strip()
 
         summaries.append({
             "title":   art["title"],
