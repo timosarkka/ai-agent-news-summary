@@ -66,7 +66,7 @@ The basic architecture of the agent is currently as follows:
    - **summarize_articles(articles, max_length)**: summarizes the article texts, the model reads at most max_length words for the summary
    - **generate_summary(domainurl)**: Runs the entire pipeline—calls latest_news → fetch_article_text → summarize_articles on each article, then combines all mini-summaries and asks the LLM to distill them into a ~500-word, nicely formatted summary (paragraphs + bullet points)
    - **send_email(subject, body)**: Sends a plain-text email (using SMTP credentials from config.ini) with the given subject and body
-   - **final_answer.py** → formats and returns the LLM’s news summary
+   - **final_answer.py** → formats and returns the LLM’s news summary (mainly used when executing manually from CLI)
 
 4. **Agent Loop** (smolagents)  
    - **Think**: LLM plans next step  
