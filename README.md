@@ -44,7 +44,6 @@ An example manual run from the command line:
 \
 \
 <img src="docs/newsaiagent_demo.gif" alt="Demo run of the News Summary AI Agent" width="900"/>
-\
 
 ## 3. Main Architecture
 
