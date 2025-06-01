@@ -2,7 +2,7 @@
 import configparser
 import yaml
 from smolagents import CodeAgent, OpenAIServerModel
-from tools.news_tools import latest_news, fetch_article_text, summarize_articles
+from tools.tools import latest_news, fetch_article_text, summarize_articles
 from tools.final_answer import FinalAnswerTool
 
 with open("prompts.yaml", 'r') as stream:
