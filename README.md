@@ -30,7 +30,7 @@ The summarizing behavior can be fined-tuned by altering the user query used in m
 
 Each day, twice a day, the agent provides me a news summary at 8.00 am and 4.00 pm. Currently I'm running the scheduler from my own MacBook, but it could just as easily be run from a dedicated small VM. 
 
-An example news summary from 1.6.2024, the news domain set at [yle.fi](https://yle.fi). The time of the piece is different than normally since I was testing the agent, but the actual daily news summaries provided are identical to the one in the screenshot.
+An example news summary from 1.6.2024, the news domain set at [yle.fi](https://yle.fi). The time of the piece is different than normally since I was testing the agent, but the actual daily news summaries provided are identical to the one in the screenshot:
 
 ![908D9C38-C1A0-438E-8D3A-F7D44AAECB71](https://github.com/user-attachments/assets/e3fe5db0-e690-47b1-8b53-00b95ee844b6)
 
