@@ -66,7 +66,7 @@ def fetch_article_text(url: str) -> str:
         return "\n\n".join(p.get_text(strip=True) for p in paragraphs)
 
 @tool
-def summarize_articles(articles: list[dict], max_length: int = 500) -> list[dict]:
+def summarize_articles(articles: list[dict], max_length: int = 100) -> list[dict]:
     """
     Given a list of articles (with title, url, and text), produce an LLM-powered summary for each.
     Args:
@@ -98,15 +98,16 @@ def summarize_articles(articles: list[dict], max_length: int = 500) -> list[dict
 @tool
 def generate_summary(domainurl: str) -> str:
     """
-    Produces a single 125-word summary by:
+    Produces a nicely formatted summary (~500 words) by:
       1) Fetching latest headlines via `latest_news`.
       2) Downloading each article’s text via `fetch_article_text`.
       3) Summarizing each individually via `summarize_articles`.
-      4) Concatenating these mini-summaries and summarizing again into ~125 words.
+      4) Concatenating these mini-summaries and asking the LLM to reformat into
+         short paragraphs and bullet points.
     Args:
         domainurl (str): The news site’s domain, e.g. "bbc.com" or "yle.fi".
     Returns:
-        str: The final unified summary (~125 words).
+        str: The final unified summary, formatted with paragraphs & bullets.
     """
     # 1) Get up to 10 latest headlines + URLs
     headlines = latest_news(domainurl)
@@ -121,18 +122,27 @@ def generate_summary(domainurl: str) -> str:
             "text":  body
         })
     
-    # 3) Summarize each article (max 200 words each)
-    summaries = summarize_articles(articles, max_length=200)
+    # 3) Summarize each article (max 100 words each)
+    summaries = summarize_articles(articles, max_length=100)
     
-    # 4) Combine all individual summaries and distill into one ~125-word summary
+    # 4) Combine all individual summaries into one block
     combined_text = "\n\n".join(s["summary"] for s in summaries)
-    final_entry = {
-        "title": "Unified Summary of News",
-        "url":   "",
-        "text":  combined_text
-    }
-    unified = summarize_articles([final_entry], max_length=250)[0]["summary"]
-    return unified
+    
+    # 5) Ask the LLM to reformat combined_text into short paragraphs + bullet points
+    formatting_prompt = (
+        f"Below are concise summaries of today’s top articles:\n\n"
+        f"{combined_text}\n\n"
+        "Please transform this into a final summary of about 500 words, "
+        "using short paragraphs and bullet points so it’s easy to read. "
+        "Include headlines or key points as bullets where appropriate."
+        "If you're in danger of running out of tokens/space, don't include any sentences that are cut off from the middle!"
+    )
+    message = _model(
+        messages=[{"role": "user", "content": formatting_prompt}],
+        max_tokens=300
+    )
+    formatted_summary = message.content.strip()
+    return formatted_summary
 
 @tool
 def send_email(subject: str, body: str) -> None:

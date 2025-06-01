@@ -47,17 +47,17 @@
       "text":  body
     })
 
-  # Summarize each article (~200 words)
-  summaries = summarize_articles(articles, max_length=200)
+  # Summarize each article (~100 words)
+  summaries = summarize_articles(articles, max_length=100)
 
-  # Merge into one unified summary (~125 words)
+  # Merge into one unified summary (~500 words)
   combined_text = "\n\n".join(s["summary"] for s in summaries)
   final_entry = {
       "title": "Unified Summary of Today’s News",
       "url": "",
       "text": combined_text
   }
-  unified = summarize_articles([final_entry], max_length=250)[0]["summary"]
+  unified = summarize_articles([final_entry], max_length=500)[0]["summary"]
 
   # Send the final summary
   subject = "Today's News Summary"
