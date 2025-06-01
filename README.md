@@ -4,29 +4,47 @@
 
 This is a lightweight Python-based AI agent that searches for the latest news from any news domain, reads the articles and generates a concise daily news summary using an LLM. Currently, I'm using **gpt-4.1-nano** model for the summarizing. The agent framework I'm using is [smolagents](https://github.com/huggingface/smolagents).
 
-The reason for building this agent is to get a daily news summary 2x a day to my email, if I'm too busy to actually read the news. This is surprisingly difficult to do with the basic LLM models today via the chat UIs. Often, they will not provide the latest news, will hallucinate news pieces or just get blocked by the news sites. I'm sure future agentic models like the [Operator](https://openai.com/index/introducing-operator/) will fix this, but meanwhile, why not code my own solution.
+The reason for building this agent is to **get a daily news summary twice a day to my email**, if I'm too busy to actually read the news. This is surprisingly difficult to do with the basic LLM models today via the chat UIs. Often, they will not provide the latest news, will hallucinate news pieces or just get blocked by the news sites. I'm sure future agentic models like the [Operator](https://openai.com/index/introducing-operator/) will fix this, but meanwhile, why not code my own solution?
 
 The original template used to build this agent was kindly provided by [Hugging Face](https://huggingface.co/spaces/agents-course/First_agent_template).
 
 ## 2. Main Features
 
-When executing the tool manually, it asks for a news website domain url from the user (for example, [hs.fi](https://hs.fi), [yle.fi](https://yle.fi), [bbc.com](https://bbc.com), [nytimes.com](https://nytimes.com), [reuters.com](https://reuters.com) or any other major news outlet that can be used by the [newsdata.io API](https://newsdata.io/)) and as an output, returns an approximately 125-word long daily news analysis for the user.
+When executing the agent in its normal automated mode, it goes searching for news articles from a domain preset by the user in config.ini.
 
-Under the hood, the agent independently uses **3 separate tools** that it has access to:
+For example, [hs.fi](https://hs.fi), [yle.fi](https://yle.fi), [bbc.com](https://bbc.com), [nytimes.com](https://nytimes.com), or any other major news outlet that can be used by the [newsdata.io API](https://newsdata.io/).
+
+As an output, it sends an approximately 500-word long daily news summary for the user via email.
+
+Under the hood, the agent independently uses **5 separate tools** that it has access to:
 
 - **Tool #1**: Fetches the latest news headlines and their urls using newsdata.io API
 - **Tool #2**: Scrapes the actual news article content with newspaper3k/BeautifulSoup -libraries
 - **Tool #3**: Summarizes each article and stores it into a list of dictionaries
+- **Tool #4**: A grouping tool that lets the agent execute tools 1-3 in a simplified fashion via the scheduler.py
+- **Tool #5**: Sends the news summary/analysis via email 
 
-After using the tools, the agent provides one combined, final summary of all the extracted news articles, which is approximately 125 words long. The summarizing behavior can be fined-tuned by altering the user query used in main.py. For example, currently I'm instructing the agent to emphasize technology, AI and business -related news and providing concise summaries.
+The summarizing behavior can be fined-tuned by altering the user query used in main.py.
 
-Example of manual usage from the command line:
+### 2.1 Example of usage in automated mode
+
+Each day, twice a day, the agent provides me a news summary at 8.00 am and 4.00 pm. Currently I'm running the scheduler from my own MacBook, but it could just as easily be run from a dedicated small VM. 
+
+An example news summary from 1.6.2024, the news domain set at [yle.fi](https://yle.fi). The time of the piece is different than normally since I was testing the agent, but the actual daily news summaries provided are identical to the one in the screenshot.
+
+![908D9C38-C1A0-438E-8D3A-F7D44AAECB71](https://github.com/user-attachments/assets/e3fe5db0-e690-47b1-8b53-00b95ee844b6)
+
+There are known issues that still need some polishing. Occasionally, the summary is cut off in the middle of a sentence or there are some weird, unrelated dates or sentences included that do not relate to the actual content of the news.
+
+### 2.2 Example of usage in manual mode
+
+The agent can also be used manually from the command line. Then the agent prompts for the news domain url from the user. An intriguing characteristic of the agent is that it sometimes fails to execute its internal code, logs an error but finds a way to carry on nevertheless. I guess this is due to the code generating and executing capacity provided to it via the **smolagents** -library.
+
+An example manual run from the command line:
 \
 \
-<img src="docs/newsaiagent_demo.gif" alt="Demo run of the News Summary AI Agent" width="800"/>
+<img src="docs/newsaiagent_demo.gif" alt="Demo run of the News Summary AI Agent" width="900"/>
 \
-\
-Besides manual usage, I still want to add scheduling, so that the agent could provide the summary via email every morning and afternoon at 8.00 am / 4.00 pm.
 
 ## 3. Main Architecture
 
@@ -35,24 +53,30 @@ The basic architecture of the agent is currently as follows:
 1. **main.py**  
    - Loads API keys and prompt templates  
    - Instantiates a smolagents CodeAgent with the necessary tools
-   - Prompts the user for a news domain and kicks off the agent loop  
+   - Prompts the user for a news domain and kicks off the agent loop
+  
+2. **scheduler.py**
+   - A standalone script that uses the schedule library to run a “job” at 08:00 and 16:00 every day.
+   - The job() function simply calls generate_summary(domain) (where domain is read from config.ini) and then send_email(...) to deliver the formatted news summary twice daily.
+   - Keeps running in a while True: schedule.run_pending() loop to trigger the email automatically on schedule
 
-2. **Tools**  
-   - **news_tools.py**
-       - `latest_news(domainurl)`: fetches recent headlines via the NewsData API from the given domainurl
-       - `fetch_article_text(url)`: fetches the article texts from the urls
-       - `summarize_articles(articles, max_length)`: summarizes the article texts, the model reads at most max_length words for the summary
-   - **final_answer.py** → formats and returns the LLM’s news summary 
+3. **tools.py**
+   - **latest_news(domainurl)**: fetches recent headlines via the NewsData API from the given domainurl
+   - **fetch_article_text(url)**: fetches the article texts from the urls
+   - **summarize_articles(articles, max_length)**: summarizes the article texts, the model reads at most max_length words for the summary
+   - **generate_summary(domainurl)**: Runs the entire pipeline—calls latest_news → fetch_article_text → summarize_articles on each article, then combines all mini-summaries and asks the LLM to distill them into a ~500-word, nicely formatted summary (paragraphs + bullet points)
+   - **send_email(subject, body)**: Sends a plain-text email (using SMTP credentials from config.ini) with the given subject and body
+   - **final_answer.py** → formats and returns the LLM’s news summary
 
-3. **Agent Loop** (smolagents)  
+4. **Agent Loop** (smolagents)  
    - **Think**: LLM plans next step  
-   - **Act**: calls `latest_news` to get headlines and urls, `fetch_article_text` to get the full texts or `summarize_articles` to summarize them
+   - **Act**: Calls tools as necessary to achieve the desired goals
    - **Observe**: Observers the result of the latest action
    - **Think**: Plans next step, and so on...
   
 ## 4. Tech Stack
 
-- **Python**: Main language for the agent and tools. Libraries used include configparser, yaml, requests, json
+- **Python**: Main language for the agent and tools. Libraries used include configparser, yaml, requests, json, newspaper3k, smtplib etc.
 - **smolagents**: Framework used for the agent itself and its orchestration  
 - **LLMs**: OpenAI Python SDK, gpt-4.1-nano model used via the OpenAI API for summary generation
 
@@ -64,12 +88,13 @@ The project files and folders are structured as shown below. **Note that I have 
 ai-agent-news-summary
 ├── tools/
 │   ├── final_answer.py     # Allows the agent to form the final answer
-|   ├── news_tools.py       # Contains the tools
+|   ├── tools.py            # Contains the tools
 |   ├── __init__.py         # This is needed so that the folder is recognized as a package
 ├── agent.json              # Contains the basic agent definition, including model, tools, prompt_templates, authorized imports
 ├── config.ini              # Config loader
 ├── main.py                 # The actual script used to run the agent, mainly contains a basic model and agent definition
 ├── prompts.yaml            # System prompts that give examples for the agent to help reasoning and break down tasks
+├── scheduler.py            # Contains the scheduling logic to run the agent
 ├── README.md               # This readme-file
 └── requirements.txt        # All libraries and imports needed to run the agent
 ```
