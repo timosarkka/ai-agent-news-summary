@@ -12,13 +12,16 @@
    ---
   Task: "Generate a brief summary of today's latest news"
 
-  Thought: I will proceed step by step and use the following tools: 
+  Thought: I will proceed step by step and use the following tools:
   - `latest_news` to find the top headlines and their urls for today.
   - `fetch_article_text` to actually extract the full article texts behind the headlines and urls.
-  - `summarize_articles` to create comprehensive summaries of news articles, to be used in the final summary analysis of today's news
+  - `summarize_articles` to create comprehensive summaries of news articles, to be used in the final summary analysis of today's news.
+  - `generate_summary` to run the entire fetch→summarize→merge pipeline in one call, producing a unified ~125-word overview.
+  - `send_email` to deliver the final unified summary via email once it’s ready.
 
   Code:
   ```py
+  # Option A: Manual step-by-step pipeline
   latest_news = [
     {
       "title": "Tensions rise as superpowers scrap for a piece of the Arctic",
@@ -33,13 +36,8 @@
       "url": "https://www.bbc.com/news/articles/cje7ledqvyqo"
     }
   ]
-  ```<end_code>
-
-  Observation: "I now have extracted the headlines and urls for the articles." 
-  Thought: "Let me now extract the actual news article texts to analyze them.""
-
-   Code:
-  ```py
+  
+  # Extract full texts
   articles = []
   for h in latest_news:
     body = fetch_article_text(h["url"])
@@ -48,39 +46,43 @@
       "url":   h["url"],
       "text":  body
     })
-  ```<end_code>
 
-  Observation: "I now have the full text for each article."
-  Thought: "I will now generate comprehensive summaries for each article."
-  
-  Code:
-  ```py
+  # Summarize each article (~200 words)
   summaries = summarize_articles(articles, max_length=200)
-  ```<end_code>
 
-  Observation:
-  [
-  {"title": "...Arctic...", "url": "...cjwqn7z02plo", "summary": "…(200 words max)…"},
-  {"title": "...two weeks...", "url": "...c1w387gr30ro", "summary": "…(200 words max)…"},
-  {"title": "...foreign students...", "url": "...cje7ledqvyqo", "summary": "…(200 words max)…"}
-  ]
-
-  Thought: "I have a summary for each of the articles. I will now merge these individual summaries into a single, coherent overview of today’s news, targeting about 125 words."
-
-    Code:
-  ```py
-  # Combine the text of all summaries
+  # Merge into one unified summary (~125 words)
   combined_text = "\n\n".join(s["summary"] for s in summaries)
-  
-  # Use summarize_articles to distill the combined text into one unified summary
   final_entry = {
       "title": "Unified Summary of Today’s News",
       "url": "",
       "text": combined_text
   }
-  unified = summarize_articles([final_entry], max_length=125)[0]["summary"]
+  unified = summarize_articles([final_entry], max_length=250)[0]["summary"]
+
+  # Send the final summary
+  subject = "Today's News Summary"
+  send_email(subject, unified)
+
   final_answer(unified)
   ```<end_code>
+
+  Observation: "I have sent the manual pipeline’s unified summary via email."
+
+  Thought: "Alternatively, I can use `generate_summary` to run all steps at once."
+
+  Code:
+  ```py
+  # Option B: Single-call pipeline with generate_summary
+  domain = "bbc.com"  # or any configured domain
+  unified = generate_summary(domain)
+
+  subject = "Today's News Summary"
+  send_email(subject, unified)
+
+  final_answer(unified)
+  ```<end_code>
+
+  Observation: "I used `generate_summary` to fetch, summarize, merge, and then emailed the result."
 
   ---
   Task: "Generate an image of the oldest person in this document."

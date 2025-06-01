@@ -11,7 +11,15 @@
         {
             "name": "summarize_articles",
             "description": "Takes a list of {title, url, text} and returns detailed LLM‐powered summariea: list[dict]: One dict per article, with 'title', 'url', and 'summary'."
-        },  
+        },
+        {
+            "name": "generate_summary",
+            "description": "Combines latest headlines → fetches each article → summarizes each (max 200 words) → merges into one ~250-word summary. Takes domainurl (string) and returns a single summary (string)."
+        },
+        {
+            "name": "send_email",
+            "description": "Sends a plain-text email via SMTP, using credentials from config.ini. Takes subject (string) and body (string) and returns None."
+        },
         {
           "name": "final_answer",
           "description": "Outputs the agent’s final answer to the user."
@@ -65,6 +73,14 @@
         "time",
         "collections",
         "re",
-        "json"
+        "json",
+        "requests",
+        "newspaper3k",
+        "bs4",
+        "smtplib",
+        "email.mime.text",
+        "email.mime.multipart",
+        "logging",
+        "schedule"
     ]
 }
