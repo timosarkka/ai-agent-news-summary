@@ -22,11 +22,11 @@ def job():
         print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ERROR in job(): {e}")
 
 # Schedule the job at 08:00 and 16:00 each day
-schedule.every().day.at("14:42").do(job)
-# schedule.every().day.at("12:43").do(job)
+schedule.every().day.at("08:00").do(job)
+schedule.every().day.at("16:00").do(job)
 
 if __name__ == "__main__":
-    print("Scheduler started. Will send news summary at testing intervals...")
+    print("Scheduler started. Will send news summary at 8 am / 4 pm daily.")
     while True:
         schedule.run_pending()
         time.sleep(60)
