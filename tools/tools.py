@@ -71,7 +71,7 @@ def summarize_articles(articles: list[dict], max_length: int = 100) -> list[dict
     Given a list of articles (with title, url, and text), produce an LLM-powered summary for each.
     Args:
         articles (list[dict]): A list of dictionaries, each containing "title", "url", and "text".
-        max_length (int, optional): The maximum word length for each summary. Defaults to 500.
+        max_length (int, optional): The maximum word length for each summary. Defaults to 100.
     Returns:
         list[dict]: A list of dictionaries, each with "title", "url", and "summary".
     """
@@ -98,7 +98,7 @@ def summarize_articles(articles: list[dict], max_length: int = 100) -> list[dict
 @tool
 def generate_summary(domainurl: str) -> str:
     """
-    Produces a nicely formatted summary (~500 words) by:
+    Produces a nicely formatted summary (~600 words) by:
       1) Fetching latest headlines via `latest_news`.
       2) Downloading each article’s text via `fetch_article_text`.
       3) Summarizing each individually via `summarize_articles`.
@@ -122,8 +122,8 @@ def generate_summary(domainurl: str) -> str:
             "text":  body
         })
     
-    # 3) Summarize each article (max 100 words each)
-    summaries = summarize_articles(articles, max_length=100)
+    # 3) Summarize each article (max 80 words each)
+    summaries = summarize_articles(articles, max_length=80)
     
     # 4) Combine all individual summaries into one block
     combined_text = "\n\n".join(s["summary"] for s in summaries)
@@ -132,18 +132,18 @@ def generate_summary(domainurl: str) -> str:
     formatting_prompt = (
         f"Below are concise summaries of today’s top articles:\n\n"
         f"{combined_text}\n\n"
-        "Please transform this into a final summary of about 500 words,"
+        "Please transform this into a final summary of about 600 words,"
         "using short paragraphs and bullet points so it’s easy to read."
         "Include headlines or key points as bullets where appropriate."
-        "Only use maximum 2 bullet points per news piece."
-        "Try to always include 5 different news pieces in the final summary if possible."
+        "Use no more than one bullet point per news piece."
+        "Make sure to include at least 5 different news pieces in the final summary."
         "Write the summary in plain text only — do not use Markdown formatting such as **bold**. "
         "Start bullet items with a hyphen. "
         "If you're in danger of running out of tokens/space, don't include any sentences that are cut off from the middle!"
     )
     message = _model(
         messages=[{"role": "user", "content": formatting_prompt}],
-        max_tokens=300
+        max_tokens=950
     )
     formatted_summary = message.content.strip()
     return formatted_summary
