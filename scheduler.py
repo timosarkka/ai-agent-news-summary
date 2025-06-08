@@ -15,14 +15,15 @@ def job():
     """
     try:
         summary_text = generate_summary(domain)
-        subject = f"News Summary for {domain}"
+        timestamp = time.strftime("%Y-%m-%d %H:%M")
+        subject = f"News Summary for {domain} on {timestamp}"
         send_email(subject, summary_text)
         print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Successfully sent summary email for {domain}.")
     except Exception as e:
         print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ERROR in job(): {e}")
 
 # Schedule the job at 08:00 and 16:00 each day
-schedule.every().day.at("08:00").do(job)
+schedule.every().day.at("15:06").do(job)
 schedule.every().day.at("16:00").do(job)
 
 if __name__ == "__main__":

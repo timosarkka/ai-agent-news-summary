@@ -132,9 +132,13 @@ def generate_summary(domainurl: str) -> str:
     formatting_prompt = (
         f"Below are concise summaries of today’s top articles:\n\n"
         f"{combined_text}\n\n"
-        "Please transform this into a final summary of about 500 words, "
-        "using short paragraphs and bullet points so it’s easy to read. "
+        "Please transform this into a final summary of about 500 words,"
+        "using short paragraphs and bullet points so it’s easy to read."
         "Include headlines or key points as bullets where appropriate."
+        "Only use maximum 2 bullet points per news piece."
+        "Try to always include 5 different news pieces in the final summary if possible."
+        "Write the summary in plain text only — do not use Markdown formatting such as **bold**. "
+        "Start bullet items with a hyphen. "
         "If you're in danger of running out of tokens/space, don't include any sentences that are cut off from the middle!"
     )
     message = _model(
