@@ -23,7 +23,7 @@ def job():
         print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ERROR in job(): {e}")
 
 # Schedule the job at 08:00 and 16:00 each day
-schedule.every().day.at("15:06").do(job)
+schedule.every().day.at("08:00").do(job)
 schedule.every().day.at("16:00").do(job)
 
 if __name__ == "__main__":
