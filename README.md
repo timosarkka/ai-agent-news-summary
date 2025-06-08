@@ -14,7 +14,7 @@ When executing the agent in its normal automated mode, it goes searching for new
 
 For example, [hs.fi](https://hs.fi), [yle.fi](https://yle.fi), [bbc.com](https://bbc.com), [nytimes.com](https://nytimes.com), or any other major news outlet that can be used by the [newsdata.io API](https://newsdata.io/).
 
-As an output, it sends an approximately 500-word long daily news summary for the user via email.
+As an output, it sends an approximately 600-word long daily news summary for the user via email.
 
 Under the hood, the agent independently uses **5 separate tools** that it has access to:
 
@@ -63,7 +63,7 @@ The basic architecture of the agent is currently as follows:
    - **latest_news(domainurl)**: fetches recent headlines via the NewsData API from the given domainurl
    - **fetch_article_text(url)**: fetches the article texts from the urls
    - **summarize_articles(articles, max_length)**: summarizes the article texts, the model reads at most max_length words for the summary
-   - **generate_summary(domainurl)**: Runs the entire pipeline—calls latest_news → fetch_article_text → summarize_articles on each article, then combines all mini-summaries and asks the LLM to distill them into a ~500-word, nicely formatted summary (paragraphs + bullet points)
+   - **generate_summary(domainurl)**: Runs the entire pipeline—calls latest_news → fetch_article_text → summarize_articles on each article, then combines all mini-summaries and asks the LLM to distill them into a ~600-word, nicely formatted summary (paragraphs + bullet points)
    - **send_email(subject, body)**: Sends a plain-text email (using SMTP credentials from config.ini) with the given subject and body
    - **final_answer.py** → formats and returns the LLM’s news summary (mainly used when executing manually from CLI)
 
