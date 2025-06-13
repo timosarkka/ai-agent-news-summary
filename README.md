@@ -28,7 +28,7 @@ The summarizing behavior can be fined-tuned by altering the user query used in m
 
 ### 2.1 Example of usage in automated mode
 
-Each day, twice a day, the agent provides a news summary at 8.00 am and 4.00 pm. Currently I'm running the agent from a dedicated small Linux VM as a background job.
+Each day, twice a day, the agent provides a news summary at 8.00 am and 4.00 pm. Currently I'm running the agent from a dedicated small Linux VM hosted on Azure.
 
 A part of an example news summary from 8.6.2024, the news domain set at [yle.fi](https://yle.fi). The time of the piece is different than normally since I was testing the agent, but the actual daily news summaries provided are identical to the one in the screenshot:
 
