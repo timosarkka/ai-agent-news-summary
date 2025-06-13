@@ -28,13 +28,13 @@ The summarizing behavior can be fined-tuned by altering the user query used in m
 
 ### 2.1 Example of usage in automated mode
 
-Each day, twice a day, the agent provides a news summary at 8.00 am and 4.00 pm. Currently I'm running the scheduler from my own MacBook, but it could just as easily be run from a dedicated small VM. 
+Each day, twice a day, the agent provides a news summary at 8.00 am and 4.00 pm. Currently I'm running the agent from a dedicated small Linux VM as a background job.
 
 A part of an example news summary from 8.6.2024, the news domain set at [yle.fi](https://yle.fi). The time of the piece is different than normally since I was testing the agent, but the actual daily news summaries provided are identical to the one in the screenshot:
 
 ![E72E8442-229F-46C7-8372-BCB62A10D32F](https://github.com/user-attachments/assets/7af1f4f7-2aa4-4856-b519-663e88cecf01)
 
-The full summaries are usually about 600-700 words long in practice and include a wide variety of different topics.
+The full summaries are usually about 600-700 words long and include a wide variety of different topics.
 
 ### 2.2 Example of usage in manual mode
 
