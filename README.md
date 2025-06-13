@@ -20,7 +20,7 @@ Under the hood, the agent independently uses **5 separate tools** that it has ac
 
 - **Tool #1**: Fetches the latest news headlines and their urls using newsdata.io API
 - **Tool #2**: Scrapes the actual news article content with newspaper3k/BeautifulSoup -libraries
-- **Tool #3**: Summarizes each article and stores it into a list of dictionaries
+- **Tool #3**: Summarizes each article and stores it for later use
 - **Tool #4**: A grouping tool that lets the agent execute tools 1-3 in a simplified fashion via the scheduler.py
 - **Tool #5**: Sends the news summary/analysis via email 
 
