@@ -1,4 +1,4 @@
-# AI News Summary Agent
+# News Summary Agent
 
 ## 1. Introduction
 
@@ -38,7 +38,7 @@ The full summaries are usually about 600-700 words long in practice and include 
 
 ### 2.2 Example of usage in manual mode
 
-The agent can also be used manually from the command line. Then the agent prompts for the news domain url from the user. An intriguing characteristic of the agent is that it sometimes fails to execute its internal code, logs an error but finds a way to carry on nevertheless. I guess this is due to the code generating and executing capacity provided to it via the **smolagents** -library.
+The agent can also be used manually from the command line. Then the agent prompts for the news domain url from the user. An intriguing characteristic of the agent is that it sometimes fails to execute its internal code, logs an error but finds a way to carry on nevertheless (this is a phenomenon called ["self-healing"](https://github.com/humanlayer/12-factor-agents/blob/main/content/factor-09-compact-errors.md)).
 
 An example manual run from the command line:
 \
